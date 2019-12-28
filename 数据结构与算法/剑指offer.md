@@ -1052,3 +1052,147 @@ class Solution {
 ```
 
 ### 二叉树中和为某一值的路径
+
+输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下 一直到叶结点所经过的结点形成一条路径。
+
+```java
+private ArrayList<ArrayList<Integer>> lists = new ArrayList<>();
+
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root, int target) {
+        backtracking(root, target, new ArrayList<>());
+        return lists;
+    }
+
+    public void backtracking(TreeNode root, int target, ArrayList<Integer> list) {
+        if (root == null)
+            return;
+        list.add(root.val);
+        target -= root.val;
+        if (root.left == null && root.right == null && target == 0) {
+            // add添加的是引用，如果不new一个的话，后面的操作会更改这个list
+            lists.add(new ArrayList<>(list));
+        } else {
+            backtracking(root.left, target, list);
+            backtracking(root.right, target, list);
+        }
+        // 移除最后一个元素，深度遍历完一条路径要回退
+        list.remove(list.size() - 1);
+    }
+```
+
+#### [LeetCode 112. 路径总和](https://leetcode-cn.com/problems/path-sum/)
+
+```java
+class Solution {
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if (root == null)
+            return false;
+        sum -= root.val;
+        if (root.left == null && root.right == null && sum == 0)
+            return true;
+        return hasPathSum(root.left, sum) || hasPathSum(root.right, sum);
+    }
+}
+```
+
+#### [LeetCode 113. 路径总和 II](https://leetcode-cn.com/problems/path-sum-ii/)
+
+```java
+class Solution {
+    private List<List<Integer>> lists = new ArrayList<>();
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        backtracking(root, sum, new ArrayList<>());
+        return lists;
+    }
+
+    private void backtracking(TreeNode root, int sum, List<Integer> list) {
+        if (root == null)
+            return;
+        list.add(root.val);
+        sum -= root.val;
+        if (root.left == null & root.right == null && sum == 0) {
+            lists.add(new ArrayList<>(list));
+        } else {
+            backtracking(root.left, sum, list);
+            backtracking(root.right, sum, list);
+        }
+        list.remove(list.size() - 1);
+    }
+}
+```
+
+#### [LeetCode 437. 路径总和 III](https://leetcode-cn.com/problems/path-sum-iii/)
+
+```java
+class Solution {
+    private int res = 0;
+    public int pathSum(TreeNode root, int sum) {
+        pathSumWithRoot(root, sum);
+        if (root != null) {
+            pathSum(root.left, sum);
+            pathSum(root.right, sum);
+        }
+        return res;
+    }
+
+    private void pathSumWithRoot(TreeNode root, int sum) {
+        if (root == null)
+            return;
+        if (sum == root.val) {
+            res++;
+        }
+        // 注意这里不要使用else, 有 {1,-2} {1,-2,1,-1}的情况
+        pathSumWithRoot(root.left, sum - root.val);
+        pathSumWithRoot(root.right, sum - root.val);
+    }
+}
+```
+
+### 数组中出现次数超过一半的数字
+
+```java
+/**
+ * Boyer-Moore 投票算法
+ */
+public class Solution {
+    public int MoreThanHalfNum_Solution(int [] array) {
+        int candidate = array[0];
+        for(int i = 1,count = 1;i < array.length;i++){
+            count += (array[i] == candidate) ? 1 : - 1;
+            if (count == 0){
+                candidate = array[i];
+                count = 1;
+            }
+        }
+        int cnt = 0;
+        for (int num : array){
+            if (num == candidate)
+                cnt++;
+        }
+        if (cnt > array.length /2)
+            return candidate;
+        return 0;
+    }
+}
+```
+
+#### [LeetCode 169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
+
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        int count = 0;
+        int candidate = 0;
+        for (int num : nums){
+            if (count == 0){
+                candidate = num;
+            }
+            count += (num == candidate) ? 1 : -1;
+        }
+        return candidate;
+    }
+}
+```
+
+### 最小的 K 个数
+
