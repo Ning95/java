@@ -1196,3 +1196,260 @@ class Solution {
 
 ### 最小的 K 个数
 
+
+
+### 连续子数组的最大和
+
+```java
+public class Solution {
+    public int FindGreatestSumOfSubArray(int[] nums) {
+        int sum = 0;
+        int ans = nums[0];
+        for (int num : nums){
+            if (sum > 0){
+                sum += num; 
+            }else{
+                sum = num;
+            }
+            ans = Math.max(ans,sum);
+        }
+        return ans;
+    }
+}
+```
+
+#### [LeetCode 53. 最大子序和](https://leetcode-cn.com/problems/maximum-subarray/)
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int sum = 0;
+        int ans = nums[0];
+        for (int num : nums){
+            if (sum > 0){
+                sum += num;
+            }else{
+                sum = num;
+            }
+            ans = Math.max(ans, sum);
+        }
+        return ans;
+    }
+}
+```
+
+### 两个链表的第一个公共结点
+
+```java
+public class Solution {
+    public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
+        ListNode p1 = pHead1;
+        ListNode p2 = pHead2;
+        while (p1 != p2) {
+            p1 = (p1 == null) ? pHead2 : p1.next;
+            p2 = (p2 == null) ? pHead1 : p2.next;
+        }
+        return p1;
+    }
+}
+```
+
+#### [LeetCode 160. 相交链表](https://leetcode-cn.com/problems/intersection-of-two-linked-lists/)
+
+```java
+/**
+ * 设 A 的长度为 a + c，B 的长度为 b + c
+ * 其中 c 为尾部公共部分长度，可知 a + c + b = b + c + a
+ */
+class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode p1 = headA;
+        ListNode p2 = headB;
+        while (p1 != p2) {
+            p1 = (p1 == null) ? headB : p1.next;
+            p2 = (p2 == null) ? headA : p2.next;
+        }
+        return p1;
+    }
+}
+```
+
+### 数字在排序数组中出现的次数
+
+```java
+public class Solution {
+    public int GetNumberOfK(int [] array , int k) {
+        int first = binarySearch(array,k);
+        int last = binarySearch(array,k + 1);
+
+        return (first == array.length || array[first] != k) ? 0 : last - first;
+    }
+
+    private int binarySearch(int[] nums, int k){
+        int l = 0;
+        int h = nums.length;
+        while (l < h){
+            int mid = l + (h - l)/ 2;
+            if (nums[mid] >= k){
+                h = mid;
+            }else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    }
+}
+```
+
+### 和为 S 的两个数字
+
+输入一个递增排序的数组和一个数字 S，在数组中查找两个数，使得他们的和正好是 S。如果有多对数字的和等于 S，输出两个数的乘积最小的。
+
+```java
+public class Solution {
+    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+        int i = 0;
+        int j = array.length - 1;
+        while (i < j){
+            int cur = array[i] + array[j];
+            if (cur == sum){
+                return new ArrayList<>(Arrays.asList(array[i],array[j]));
+            }else if (cur < sum){
+                i++;
+            }else {
+                j--;
+            }
+        }
+        return new ArrayList<>();
+    }
+}
+```
+
+#### [LeetCode 1. 两数之和](https://leetcode-cn.com/problems/two-sum/)
+
+```java
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer,Integer> hashMap = new HashMap<>();
+        for (int i = 0;i < nums.length;i++){
+            int temp = target - nums[i];
+            if (hashMap.containsKey(temp)){
+                return new int[] {hashMap.get(temp),i};
+            }
+            hashMap.put(nums[i],i);
+        }
+        return null;
+    }
+}
+```
+
+### 和为 S 的连续正数序列
+
+```java
+public class Solution {
+    public ArrayList<ArrayList<Integer>> FindContinuousSequence(int sum) {
+        //存放结果
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        //两个起点，相当于动态窗口的两边，根据其窗口内的值的和来确定窗口的位置和大小
+        int plow = 1, phigh = 2;
+        while (plow < phigh) {
+            //由于是连续的，差为1的一个序列，那么求和公式是(a0+an)*n/2
+            int cur = (phigh + plow) * (phigh - plow + 1) / 2;
+            //相等，那么就将窗口范围的所有数添加进结果集
+            if (cur == sum) {
+                ArrayList<Integer> list = new ArrayList<>();
+                for (int i = plow; i <= phigh; i++) {
+                    list.add(i);
+                }
+                result.add(list);
+                plow++;
+                //如果当前窗口内的值之和小于sum，那么右边窗口右移一下
+            } else if (cur < sum) {
+                phigh++;
+            } else {
+                //如果当前窗口内的值之和大于sum，那么左边窗口右移一下
+                plow++;
+            }
+        }
+        return result;
+    }
+}
+```
+
+### 翻转单词顺序列
+
+```java
+public class Solution {
+    public String ReverseSentence(String str) {
+        int n = str.length();
+        char[] chars = str.toCharArray();
+        int i = 0, j = 0;
+        while (j <= n) {
+            if (j == n || chars[j] == ' ') {
+                reverse(chars, i, j - 1);
+                i = j + 1;
+            }
+            j++;
+        }
+        reverse(chars, 0, n - 1);
+        return new String(chars);
+    }
+
+    public void reverse(char[] str, int i, int j) {
+        while (i < j) {
+            char temp = str[i];
+            str[i] = str[j];
+            str[j] = temp;
+            i++;
+            j--;
+        }
+    }
+}
+```
+
+### 左旋转字符串
+
+```java
+public class Solution {
+    public String LeftRotateString(String str, int n) {
+        if (str.length() == 0) 
+            return str;
+        n %= str.length();
+        char[] chars = str.toCharArray();
+        reverse(chars, 0, n - 1);
+        reverse(chars, n, chars.length - 1);
+        reverse(chars, 0, chars.length - 1);
+        return new String(chars);
+    }
+
+    public void reverse(char[] str, int i, int j) {
+        while (i < j) {
+            char temp = str[i];
+            str[i] = str[j];
+            str[j] = temp;
+            i++;
+            j--;
+        }
+    }
+}
+```
+
+```java
+public class Solution {
+    public String LeftRotateString(String str,int n) {
+        if (str.length() == 0)
+            return str;
+        n %= str.length();
+        char[] chars = str.toCharArray();
+        while (n-- > 0) {
+            char temp = chars[0];
+            for (int i = 1;i < chars.length;i++){
+                chars[i - 1] = chars[i];
+            }
+            chars[chars.length - 1] = temp;
+        }
+        return new String(chars);
+    }
+}
+```
+
