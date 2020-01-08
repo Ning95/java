@@ -24,7 +24,7 @@ class Solution {
 
 ### [LeetCode 11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/)
 
-![](images\LeeCode11.jpg)
+![](https://aliyun-lc-upload.oss-cn-hangzhou.aliyuncs.com/aliyun-lc-upload/uploads/2018/07/25/question_11.jpg)
 
 ```java
 /**
@@ -51,6 +51,8 @@ class Solution {
 ### [LeetCode 42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/) (★★★)
 
 给定 *n* 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+![](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/22/rainwatertrap.png)
 
 ```java
 
